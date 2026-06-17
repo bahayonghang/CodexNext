@@ -1,0 +1,3 @@
+{"file":".trellis/spec/backend/index.md","reason":"Backend hook work will live under .codex and should follow repo backend guidance."}
+{"file":".trellis/spec/guides/index.md","reason":"Cross-layer and reuse checks are relevant before adding another persistent hook/state path."}
+{"file":".trellis/tasks/06-17-codex-auto-recovery/research/codex-openai-rate-limit-notes.md","reason":"Implementation depends on official Codex/OpenAI hook, error, and usage-limit behavior documented during planning."}

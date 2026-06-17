@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -X utf8 \"${PLUGIN_ROOT}/scripts/auto-recover-stop.py\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

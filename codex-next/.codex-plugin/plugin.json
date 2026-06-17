@@ -1,0 +1,23 @@
+{
+  "name": "codex-next",
+  "version": "0.1.0",
+  "description": "Auto-recover Codex turns interrupted by 429, 503, and usage-limit errors.",
+  "author": {
+    "name": "Local developer"
+  },
+  "interface": {
+    "displayName": "Codex Next",
+    "shortDescription": "Retry interrupted Codex turns with guardrails.",
+    "longDescription": "Codex Next adds a Stop hook that retries 429, 503, and usage-limit interruptions with per-class and global caps.",
+    "developerName": "Local developer",
+    "category": "Productivity",
+    "capabilities": [
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Continue after a Codex 429 interruption.",
+      "Retry a Codex 503 stop with limits.",
+      "Handle Codex usage-limit interruptions safely."
+    ]
+  }
+}

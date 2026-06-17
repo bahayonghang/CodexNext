@@ -1,0 +1,3 @@
+{"file":".trellis/spec/backend/index.md","reason":"Review should verify the new hook aligns with repo backend guidance and does not broaden scope."}
+{"file":".trellis/spec/guides/index.md","reason":"Review should check for avoidable duplication and cross-layer drift around hook state and configuration."}
+{"file":".trellis/tasks/06-17-codex-auto-recovery/research/codex-openai-rate-limit-notes.md","reason":"Check phase needs the same official-source distinctions between transient retry and capped usage-limit retries."}

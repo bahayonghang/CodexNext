@@ -1,0 +1,8 @@
+{
+  "turn_id": "turn-429",
+  "stop_hook_active": false,
+  "last_assistant_message": "Request failed with HTTP 429 too many requests. The turn was interrupted by a rate limit.",
+  "transcript_path": null,
+  "cwd": "D:/Documents/Code/Agents/CodexNext",
+  "model": "gpt-5-codex"
+}

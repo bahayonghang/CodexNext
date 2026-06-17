@@ -1,0 +1,20 @@
+{
+  "name": "codex-next-local",
+  "interface": {
+    "displayName": "Codex Next Local"
+  },
+  "plugins": [
+    {
+      "name": "codex-next",
+      "source": {
+        "source": "local",
+        "path": "./codex-next"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

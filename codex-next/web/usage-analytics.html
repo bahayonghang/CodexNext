@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codex Next Usage Analytics</title>
+    <link rel="stylesheet" href="/usage-analytics.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">Codex Next</p>
+          <h1>Usage Analytics</h1>
+        </div>
+        <div class="header-actions">
+          <span id="status-chip" class="status-chip">Idle</span>
+        </div>
+      </header>
+
+      <section class="filter-band">
+        <form id="filters-form" class="filters-grid">
+          <label>
+            <span>From</span>
+            <input id="filter-from" name="from" type="datetime-local" />
+          </label>
+          <label>
+            <span>To</span>
+            <input id="filter-to" name="to" type="datetime-local" />
+          </label>
+          <label>
+            <span>Kind</span>
+            <select id="filter-kind" name="kind">
+              <option value="">All</option>
+            </select>
+          </label>
+          <label>
+            <span>Decision</span>
+            <select id="filter-decision" name="decision">
+              <option value="">All</option>
+            </select>
+          </label>
+          <label>
+            <span>Model</span>
+            <select id="filter-model" name="model">
+              <option value="">All</option>
+            </select>
+          </label>
+          <label class="workspace-filter">
+            <span>Workspace</span>
+            <input id="filter-cwd" name="cwd" type="text" placeholder="contains path fragment" />
+          </label>
+          <div class="filter-actions">
+            <button type="submit">Refresh</button>
+            <button id="reset-button" type="button" class="secondary">Reset</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="stats-grid" aria-label="summary">
+        <article class="stat-tile">
+          <span>Total events</span>
+          <strong id="metric-total">0</strong>
+        </article>
+        <article class="stat-tile">
+          <span>Auto-continues</span>
+          <strong id="metric-continue">0</strong>
+        </article>
+        <article class="stat-tile">
+          <span>Capped stops</span>
+          <strong id="metric-stopped">0</strong>
+        </article>
+        <article class="stat-tile">
+          <span>Allowed stops</span>
+          <strong id="metric-allowed">0</strong>
+        </article>
+        <article class="stat-tile">
+          <span>Skipped</span>
+          <strong id="metric-skipped">0</strong>
+        </article>
+      </section>
+
+      <section class="breakdown-grid">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>By kind</h2>
+          </div>
+          <ul id="kind-breakdown" class="count-list"></ul>
+        </section>
+        <section class="panel">
+          <div class="panel-header">
+            <h2>By decision</h2>
+          </div>
+          <ul id="decision-breakdown" class="count-list"></ul>
+        </section>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="panel-header">
+          <h2>Events</h2>
+          <div class="pager">
+            <button id="prev-button" type="button" class="secondary">Previous</button>
+            <span id="page-label">0-0</span>
+            <button id="next-button" type="button" class="secondary">Next</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Kind</th>
+                <th>Decision</th>
+                <th>Model</th>
+                <th>Workspace</th>
+                <th>Turn</th>
+                <th>Attempts</th>
+              </tr>
+            </thead>
+            <tbody id="events-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <p id="error-banner" class="error-banner" hidden></p>
+    </main>
+
+    <script type="module" src="/usage-analytics.js"></script>
+  </body>
+</html>

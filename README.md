@@ -20,6 +20,30 @@ In practice, that means:
 The plugin does not try to "fix" OpenAI limits. It only reduces context
 switching when Codex is interrupted and a bounded retry is reasonable.
 
+## Runtime and Storage
+
+Normal plugin operation now uses Node.js, not Python.
+
+- the Stop hook runs `node codex-next/scripts/auto-recover-stop.mjs`
+- the plugin requires a Node runtime that includes the built-in `node:sqlite`
+  module
+- this implementation was validated locally with `node v25.9.0`
+
+SQLite state lives here:
+
+- installed plugin: `${PLUGIN_DATA}/codex-next.sqlite`
+- repo-local fallback: `codex-next/.local-state/codex-next.sqlite`
+
+The database stores only recovery metadata:
+
+- live retry state per session
+- append-only stop-hook analytics events
+
+It does not store transcript text, prompt text, or assistant message bodies.
+
+If an older JSON session-state file already exists, the JS runtime lazily imports
+that session into SQLite on first use and leaves the JSON file in place.
+
 ## What It Handles
 
 The plugin watches for three interruption classes:
@@ -48,6 +72,36 @@ returns an actionable message instead of looping.
 - scans only transcript deltas
 - resets transcript offset when the transcript rotates or shrinks
 - stores retry state per session
+
+## Local Analytics Viewer
+
+This repo also ships a local read-only viewer for the plugin's own recovery
+analytics. This is not token, billing, or account-usage reporting.
+
+Start the viewer manually when you need it:
+
+```powershell
+node codex-next/scripts/usage-analytics-server.mjs --host 127.0.0.1 --port 3210
+```
+
+The command prints a localhost URL such as `http://127.0.0.1:3210/`.
+
+The viewer and APIs support filtering by:
+
+- time range
+- stop kind
+- decision
+- model
+- workspace-path text match
+
+Available read-only endpoints:
+
+- `GET /api/health`
+- `GET /api/facets`
+- `GET /api/summary`
+- `GET /api/events`
+
+The Stop hook does not auto-start this server.
 
 ## Install
 
@@ -141,24 +195,30 @@ Expected behavior:
   the plugin can ask Codex to continue
 - if retries are exhausted, the plugin stops and tells you to check `/status`,
   wait for reset, add credits if applicable, or switch to a lower-cost model
+- when the viewer server is running, you can inspect the recorded recovery
+  events in a browser without affecting hook execution
 
 ## Development
 
 Run tests:
 
 ```powershell
-python -m unittest discover -s codex-next/tests -p "test_*.py"
+node --test codex-next/tests/*.test.mjs
 ```
 
-Validate the plugin manifest:
+Run a quick JSON sanity check:
 
 ```powershell
-python C:\Users\lyh\.codex\skills\.system\plugin-creator\scripts\validate_plugin.py codex-next
+node -e "JSON.parse(require('node:fs').readFileSync('codex-next/.codex-plugin/plugin.json', 'utf8')); JSON.parse(require('node:fs').readFileSync('codex-next/hooks/hooks.json', 'utf8')); console.log('json ok')"
 ```
 
 ## Package Layout
 
 - `codex-next/.codex-plugin/plugin.json` — plugin manifest
 - `codex-next/hooks/hooks.json` — Stop hook wiring
-- `codex-next/scripts/auto-recover-stop.py` — recovery logic
-- `codex-next/tests/` — unit tests and fixtures
+- `codex-next/scripts/auto-recover-stop.mjs` — Stop-hook recovery logic
+- `codex-next/scripts/usage-analytics-server.mjs` — local analytics server
+- `codex-next/scripts/lib/` — classifier and SQLite helpers
+- `codex-next/sql/schema.sql` — SQLite bootstrap schema
+- `codex-next/web/` — static analytics viewer assets
+- `codex-next/tests/` — Node tests and fixtures

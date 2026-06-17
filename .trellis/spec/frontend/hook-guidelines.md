@@ -8,14 +8,14 @@
 
 This project ships one hook surface: a Codex `Stop` hook defined in
 `codex-next/hooks/hooks.json`. Keep hook files declarative and put all behavior
-in the Python script they invoke.
+in the runtime script they invoke.
 
 ## Custom Hook Patterns
 
 - One hook file per plugin package.
 - Use `${PLUGIN_ROOT}` in commands so the package remains relocatable.
-- Keep shell commands short and explicit. Current convention:
-  `python -X utf8 "${PLUGIN_ROOT}/scripts/auto-recover-stop.py"`
+- Keep shell commands short and explicit. Current convention is a direct Node
+  entrypoint under `codex-next/scripts/`.
 - Put timeout policy in `hooks.json`, not inside README prose.
 
 ## Data Fetching

@@ -6,9 +6,9 @@
 
 ## Overview
 
-There is no `src/` frontend app here. The "frontend" is the set of files a user
-reads or that Codex inspects when installing and presenting the plugin. Keep
-that surface small and easy to audit.
+There is no framework app here. The "frontend" is the set of files a user reads
+or that Codex inspects when installing and presenting the plugin, plus the tiny
+static analytics viewer. Keep that surface small and easy to audit.
 
 ## Directory Layout
 
@@ -18,10 +18,12 @@ codex-next/
 │   └── plugin.json
 ├── hooks/
 │   └── hooks.json
-├── scripts/
-│   └── auto-recover-stop.py
-└── tests/
-    └── ...
+├── web/
+│   ├── usage-analytics.html
+│   ├── usage-analytics.css
+│   └── usage-analytics.js
+└── scripts/
+    └── usage-analytics-server.mjs
 
 repo root/
 ├── README.md
@@ -33,10 +35,12 @@ repo root/
 - Put installation-facing and marketplace-facing metadata in
   `codex-next/.codex-plugin/plugin.json`.
 - Put Codex hook registration in `codex-next/hooks/hooks.json`.
-- Keep implementation details in `codex-next/scripts/`; the manifest and hook
-  file should stay declarative.
+- Keep viewer assets in `codex-next/web/` and backend implementation details in
+  `codex-next/scripts/`; the manifest and hook file should stay declarative.
 - Keep end-user documentation in the root `README` files so plugin users can
   find install, behavior, and development commands immediately.
+- Keep the server CLI and the browser UI decoupled. Starting the viewer is a
+  manual action, not part of installation or hook configuration.
 
 ## Naming Conventions
 
@@ -53,3 +57,5 @@ repo root/
   summary of capabilities and prompts.
 - `README.md` and `README.zh-CN.md` expand the same behavior into install and
   usage documentation.
+- `codex-next/web/usage-analytics.*` is the only browser-facing UI surface in
+  the repo and should map directly to the documented filter/query behavior.

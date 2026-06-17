@@ -1,20 +1,21 @@
 # Frontend Development Guidelines
 
-> Frontend here means the user-facing plugin surface: manifest metadata, hook wiring, and install/use docs.
+> Frontend here means the user-facing plugin surface: manifest metadata, hook wiring, install/use docs, and the local analytics viewer.
 
 ---
 
 ## Overview
 
-Codex Next does not ship a browser UI or component library. The user-facing
-surface is declarative:
+Codex Next ships a small local browser UI in addition to its declarative plugin
+surface. The user-facing surface includes:
 
 - plugin metadata in `codex-next/.codex-plugin/plugin.json`
 - hook wiring in `codex-next/hooks/hooks.json`
+- local viewer assets under `codex-next/web/`
 - install and usage copy in `README.md` and `README.zh-CN.md`
 
-Use the frontend spec files to keep that surface coherent instead of forcing
-React-style conventions onto a non-UI plugin package.
+Use the frontend spec files to keep that surface coherent without forcing a
+framework-heavy app model onto a small local viewer.
 
 ---
 
@@ -48,9 +49,11 @@ React-style conventions onto a non-UI plugin package.
 
 - `codex-next/.codex-plugin/plugin.json`
 - `codex-next/hooks/hooks.json`
+- `codex-next/web/*`
 - `README.md`
 - `README.zh-CN.md`
-- `codex-next/scripts/auto-recover-stop.py`
+- `codex-next/scripts/auto-recover-stop.mjs`
+- `codex-next/scripts/usage-analytics-server.mjs`
 
 ---
 

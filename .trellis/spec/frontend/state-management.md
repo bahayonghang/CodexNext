@@ -6,21 +6,27 @@
 
 ## Overview
 
-This repo has no frontend state library. Split state into two categories only:
+This repo has no frontend state library. Split state into three categories:
 
-- Static plugin metadata in JSON files (`plugin.json`, `hooks.json`)
-- Runtime retry state in backend-owned JSON files under `PLUGIN_DATA` or
-  `.local-state/`
+- static plugin metadata in JSON files
+- browser-local viewer state in `usage-analytics.js`
+- backend-owned persisted runtime/analytics state in SQLite
 
 ## State Categories
 
 - Static metadata:
   - plugin name, descriptions, capabilities, default prompts
   - hook command wiring and timeout
-- Runtime session state:
+- Browser-local viewer state:
+  - current filter inputs
+  - current page `limit`
+  - current page `offset`
+  - last known `total`
+- Runtime persisted state:
   - retry counters
   - transcript offset
   - duplicate-turn protection
+  - analytics events
 - Test state:
   - fixtures that model representative Stop payloads
 
@@ -33,13 +39,16 @@ This repo has no frontend state library. Split state into two categories only:
 
 ## Server State
 
-- There is no server-state cache.
+- The browser does not keep a client-side copy of analytics history beyond the
+  currently rendered page.
+- Server state lives in SQLite and is queried on demand through the local API.
 - OpenAI/Codex stop signals are consumed as one-shot payload input by the hook,
-  not stored as a replicated client cache.
+  not stored as a replicated browser cache.
 
 ## Common Mistakes
 
 - Duplicating retry-policy constants across runtime code and docs without
   updating both.
 - Treating manifest metadata as mutable runtime state.
+- Mirroring backend retry counters into browser-local state.
 - Moving runtime counters into ad hoc files outside the plugin state directory.

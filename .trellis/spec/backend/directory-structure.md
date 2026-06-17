@@ -1,19 +1,19 @@
 # Directory Structure
 
-> How the Python Stop-hook runtime is organized in this project.
+> How the JS Stop-hook runtime, SQLite store, and local analytics server are organized in this project.
 
 ---
 
 ## Overview
 
-Codex Next keeps backend logic inside the plugin package itself. There is no
-`src/` tree, service layer, or API routing. The runtime path is small enough
-that feature boundaries are directory-based:
+Codex Next keeps backend logic inside the plugin package itself. There is still
+no `src/` tree, service layer, or framework router, but the runtime surface now
+has two entrypoints:
 
-- `codex-next/scripts/` holds executable hook logic
-- `codex-next/tests/` holds unit tests for that logic
-- `codex-next/tests/fixtures/` holds captured Stop-hook payloads
-- `codex-next/.local-state/` is fallback runtime state for local repo execution
+- a short-lived Stop hook
+- a manual local analytics server
+
+Keep boundaries directory-based and explicit.
 
 ---
 
@@ -21,51 +21,60 @@ that feature boundaries are directory-based:
 
 ```text
 codex-next/
-├── .codex-plugin/
-│   └── plugin.json
 ├── hooks/
 │   └── hooks.json
 ├── scripts/
-│   └── auto-recover-stop.py
+│   ├── auto-recover-stop.mjs
+│   ├── usage-analytics-server.mjs
+│   └── lib/
+│       ├── analytics-store.mjs
+│       └── classify-stop.mjs
+├── sql/
+│   └── schema.sql
 ├── tests/
 │   ├── fixtures/
 │   │   ├── stop-non-matching.json
 │   │   ├── stop-transient-429.json
 │   │   ├── stop-transient-503.json
 │   │   └── stop-usage-limit.json
-│   └── test_auto_recover_stop.py
+│   ├── analytics-store.test.mjs
+│   ├── auto-recover-stop.test.mjs
+│   └── usage-analytics-server.test.mjs
 └── .local-state/
-    └── *.json
+    └── codex-next.sqlite
 ```
 
 ---
 
 ## Module Organization
 
-- Keep all Stop-hook decision logic in `scripts/auto-recover-stop.py` until
-  there is proven repetition. The current project favors one readable script
-  over a premature helper tree.
-- Add a new module only when a second runtime entrypoint or a clearly reusable
-  parsing/state component appears.
-- Put test-only helpers inside `tests/` rather than importing from ad hoc files
-  at repo root.
-- Keep reference material under `ref/` isolated from production paths. Do not
-  import code from `ref/`.
+- `scripts/auto-recover-stop.mjs` is the Stop-hook entrypoint only. Keep hook
+  stdin parsing, decision orchestration, and stdout response shaping here.
+- `scripts/lib/classify-stop.mjs` owns retry-class enums, regex families,
+  prompts, and caps.
+- `scripts/lib/analytics-store.mjs` owns SQLite path resolution, bootstrap,
+  legacy JSON compatibility import, and query helpers for both runtime
+  entrypoints.
+- `scripts/usage-analytics-server.mjs` owns HTTP routing and static-file
+  serving. Do not move hook decision logic into the server.
+- `sql/schema.sql` is the only schema source of truth. Do not duplicate table
+  definitions in ad hoc strings outside migration/bootstrap code.
+- Put test-only helpers or fixtures inside `tests/`, not at repo root.
 
 ## Naming Conventions
 
-- Runtime scripts use lowercase kebab-case filenames, matching
-  `auto-recover-stop.py`.
-- Tests use `test_*.py` so `unittest discover` can find them without extra
-  configuration.
-- Fixture names describe the stop class being modeled:
-  `stop-transient-429.json`, `stop-usage-limit.json`, and so on.
-- State files are derived from session identity and should stay machine-made;
-  do not hand-author files in `.local-state/`.
+- Runtime entrypoints use lowercase kebab-case `.mjs` filenames.
+- Shared runtime helpers live under `scripts/lib/` and stay noun- or verb-led:
+  `analytics-store.mjs`, `classify-stop.mjs`.
+- Tests use `*.test.mjs` so `node --test` can run the suite without extra
+  tooling.
+- Fixture names describe the stop class being modeled.
+- State files and databases are machine-owned; do not hand-author files under
+  `.local-state/`.
 
 ## Examples
 
-- `codex-next/scripts/auto-recover-stop.py` keeps classification, state I/O,
-  and output shaping together because the runtime surface is still small.
-- `codex-next/tests/test_auto_recover_stop.py` mirrors the public behavior of
-  `process_stop(...)` instead of reaching into private implementation details.
+- `codex-next/scripts/auto-recover-stop.mjs` composes shared helpers but keeps
+  the hook contract readable in one file.
+- `codex-next/scripts/lib/analytics-store.mjs` is shared by both the hook and
+  the local server instead of duplicating DB bootstrap/query logic.

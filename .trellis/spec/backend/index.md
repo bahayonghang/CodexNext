@@ -1,16 +1,17 @@
 # Backend Development Guidelines
 
-> Backend here means the Python Stop-hook runtime and its file-based session state.
+> Backend here means the local Stop-hook runtime, its SQLite-backed state, and the small local analytics server.
 
 ---
 
 ## Overview
 
-Codex Next does not have a server, API layer, or service container. The
-"backend" surface is the Python hook runtime under `codex-next/scripts/` plus
-its on-disk session state in `PLUGIN_DATA` or the plugin-local fallback state
-directory. Keep backend changes narrow, dependency-light, and compatible with
-the Stop hook's JSON input/output contract.
+Codex Next does not have a remote service or hosted API. The backend surface is
+the local hook/runtime code under `codex-next/scripts/`, its on-disk state in
+`PLUGIN_DATA` or the plugin-local fallback state directory, and the local-only
+analytics query server used by the web viewer. Keep backend changes narrow,
+dependency-light, and compatible with the Stop hook's JSON input/output
+contract.
 
 ---
 
@@ -19,7 +20,7 @@ the Stop hook's JSON input/output contract.
 | Guide | Description | Status |
 |-------|-------------|--------|
 | [Directory Structure](./directory-structure.md) | Runtime module layout and file ownership | Active |
-| [Database Guidelines](./database-guidelines.md) | File-based state instead of a database | Active |
+| [Database Guidelines](./database-guidelines.md) | SQLite-backed runtime state and analytics persistence | Active |
 | [Error Handling](./error-handling.md) | Fail-open behavior and hook output contracts | Active |
 | [Quality Guidelines](./quality-guidelines.md) | Testing, review, and forbidden runtime changes | Active |
 | [Logging Guidelines](./logging-guidelines.md) | Why stdout is reserved and logging stays minimal | Active |
@@ -33,7 +34,7 @@ the Stop hook's JSON input/output contract.
 - [ ] Read [Error Handling](./error-handling.md) before changing stop
       classification or output JSON.
 - [ ] Read [Database Guidelines](./database-guidelines.md) for any persistence
-      change, even though the project does not use a database.
+      or analytics-query change.
 - [ ] Read [Logging Guidelines](./logging-guidelines.md) before adding any
       diagnostic output.
 - [ ] Read [Quality Guidelines](./quality-guidelines.md) before modifying tests
@@ -41,8 +42,9 @@ the Stop hook's JSON input/output contract.
 
 ## Reference Files
 
-- `codex-next/scripts/auto-recover-stop.py`
-- `codex-next/tests/test_auto_recover_stop.py`
+- `codex-next/scripts/auto-recover-stop.mjs`
+- `codex-next/scripts/usage-analytics-server.mjs`
+- `codex-next/tests/*.test.mjs`
 - `codex-next/tests/fixtures/*.json`
 - `codex-next/hooks/hooks.json`
 - `README.md`

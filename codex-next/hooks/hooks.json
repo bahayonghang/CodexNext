@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python -X utf8 \"${PLUGIN_ROOT}/scripts/auto-recover-stop.py\"",
+            "command": "node \"${PLUGIN_ROOT}/scripts/auto-recover-stop.mjs\"",
             "timeout": 15
           }
         ]

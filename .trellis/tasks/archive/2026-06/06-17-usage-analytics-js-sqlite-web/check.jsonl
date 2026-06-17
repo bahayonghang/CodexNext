@@ -1,0 +1,5 @@
+{"file":".trellis/spec/backend/error-handling.md","reason":"Hook output and fail-open behavior remain the highest-risk contract during the runtime rewrite."}
+{"file":".trellis/spec/backend/quality-guidelines.md","reason":"The migration touches retry behavior and persistence, so execution needs the backend verification checklist."}
+{"file":".trellis/spec/frontend/hook-guidelines.md","reason":"Hook wiring must stay declarative and relocatable when switching from Python to Node."}
+{"file":".trellis/spec/frontend/quality-guidelines.md","reason":"Docs, manifest metadata, and hook wiring all change together and must be reviewed as one user-facing surface."}
+{"file":".trellis/tasks/archive/2026-06/06-17-codex-auto-recovery/implement.md","reason":"The archived implementation plan captures the prior test and validation expectations that the JS rewrite should keep or replace explicitly."}

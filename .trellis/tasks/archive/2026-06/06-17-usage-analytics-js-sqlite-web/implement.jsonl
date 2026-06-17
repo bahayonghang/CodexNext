@@ -1,0 +1,5 @@
+{"file":".trellis/spec/backend/index.md","reason":"Current backend spec still defines this repo as a Python hook with file-only state; implementation must intentionally change that boundary."}
+{"file":".trellis/spec/backend/database-guidelines.md","reason":"Persistence guidance currently forbids databases; use it as the baseline contract that this task will revise."}
+{"file":".trellis/spec/frontend/index.md","reason":"Current frontend spec says there is no browser UI; the local analytics viewer needs an explicit surface expansion."}
+{"file":".trellis/spec/guides/cross-layer-thinking-guide.md","reason":"This feature adds a payload-to-SQLite-to-HTTP-to-browser flow that needs explicit shared contracts."}
+{"file":".trellis/tasks/archive/2026-06/06-17-codex-auto-recovery/design.md","reason":"The archived auto-recovery design is the behavior baseline the JS rewrite must preserve while adding analytics."}

@@ -6,49 +6,65 @@
 
 ## Overview
 
-<!--
-Document your project's error handling conventions here.
+The Stop hook is defensive and fail-open. If payload parsing, transcript I/O, or
+state loading fails, the plugin should usually return no JSON and let Codex stop
+normally instead of crashing or emitting malformed output.
 
-Questions to answer:
-- What error types do you define?
-- How are errors propagated?
-- How are errors logged?
-- How are errors returned to clients?
--->
+Primary reference:
 
-(To be filled by the team)
+- `codex-next/scripts/auto-recover-stop.py`
+- `codex-next/tests/test_auto_recover_stop.py`
 
 ---
 
 ## Error Types
 
-<!-- Custom error classes/types -->
+There are no custom exception classes. Error classification is data-driven:
 
-(To be filled by the team)
+- `transient_rate_limit`
+- `transient_overload`
+- `usage_limit`
 
----
+Each class maps to:
+
+- a continue prompt in `CONTINUE_MESSAGES`
+- a capped-stop message in `STOP_MESSAGES`
+- a per-kind retry cap in `MAX_ATTEMPTS_BY_KIND`
 
 ## Error Handling Patterns
 
-<!-- Try-catch patterns, error propagation -->
-
-(To be filled by the team)
-
----
+- Wrap untrusted boundaries in broad `try/except` blocks and fall back to safe
+  defaults:
+  - `read_stdin()` -> `""`
+  - `parse_payload(...)` -> `{}`
+  - `load_state(...)` -> normalized empty state
+  - transcript reads -> empty chunk / preserved offset behavior
+- Keep helper return values structured so `process_stop(...)` can decide whether
+  to continue, stop with guidance, or no-op without throwing.
+- Use `None` as the "allow normal stop" signal. The caller emits JSON only when
+  a hook decision must be sent back to Codex.
+- Preserve Windows UTF-8 setup at process start. Hook output must stay valid
+  UTF-8 JSON on Windows shells.
 
 ## API Error Responses
 
-<!-- Standard error response format -->
+The hook has two output contracts:
 
-(To be filled by the team)
+- Continue the task:
+  `{"decision": "block", "reason": "<continue prompt>"}`
+- Stop auto-retrying after a cap:
+  `{"continue": false, "stopReason": "...", "systemMessage": "..."}`
 
----
+Anything else is a bug. Do not print plain text, stack traces, or mixed stdout
+content because Codex expects machine-readable JSON when the hook blocks.
 
 ## Common Mistakes
 
-<!-- Error handling mistakes your team has made -->
-
-(To be filled by the team)
+- Treating every error-like message as retriable. The script requires both
+  signal words and class-specific context.
+- Throwing from helper functions that can safely degrade to a no-op.
+- Writing debug output to stdout, which corrupts the hook contract.
+- Removing duplicate-turn or `stop_hook_active` guards and reintroducing loops.
 
 ## Scenario: Codex Stop Hook Auto-Recovery
 

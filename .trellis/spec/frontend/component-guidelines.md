@@ -1,59 +1,59 @@
 # Component Guidelines
 
-> How components are built in this project.
+> There is no component framework here; treat manifest metadata and user-facing copy as the interface surface.
 
 ---
 
 ## Overview
 
-<!--
-Document your project's component conventions here.
+Codex Next does not render UI components. The closest equivalent to a component
+is a user-visible contract block such as:
 
-Questions to answer:
-- What component patterns do you use?
-- How are props defined?
-- How do you handle composition?
-- What accessibility standards apply?
--->
+- `interface` fields in `codex-next/.codex-plugin/plugin.json`
+- hook descriptions implied by `hooks/hooks.json`
+- installation and behavior sections in the README files
 
-(To be filled by the team)
-
----
+These pieces should describe one narrow job consistently: bounded auto-recovery
+for interrupted Codex turns.
 
 ## Component Structure
 
-<!-- Standard structure of a component file -->
-
-(To be filled by the team)
-
----
+- `plugin.json` owns marketplace and in-product display metadata.
+- `README.md` and `README.zh-CN.md` own longer explanations, setup steps, and
+  developer commands.
+- Runtime behavior stays in `scripts/auto-recover-stop.py`; do not encode logic
+  into descriptive text fields.
 
 ## Props Conventions
 
-<!-- How props should be defined and typed -->
-
-(To be filled by the team)
-
----
+- Keep manifest fields literal and stable:
+  - `name`
+  - `version`
+  - `description`
+  - `interface.displayName`
+  - `interface.shortDescription`
+  - `interface.longDescription`
+  - `interface.capabilities`
+  - `interface.defaultPrompt`
+- When a behavior change affects these fields, update the README copy in the
+  same change so the user-facing story stays aligned.
 
 ## Styling Patterns
 
-<!-- How styles are applied (CSS modules, styled-components, Tailwind, etc.) -->
-
-(To be filled by the team)
-
----
+- There is no styling system.
+- Favor plain, direct wording over marketing language. The manifest and docs
+  should explain the retry classes, caps, and safety guards without hype.
 
 ## Accessibility
 
-<!-- A11y requirements and patterns -->
-
-(To be filled by the team)
-
----
+- Write short, concrete descriptions because the plugin is discovered through
+  textual surfaces, not visuals.
+- Keep capability lists and prompts readable in plain text without relying on
+  formatting tricks.
 
 ## Common Mistakes
 
-<!-- Component-related mistakes your team has made -->
-
-(To be filled by the team)
+- Expanding the manifest copy beyond the actual implementation.
+- Letting README wording drift from retry caps or handled stop classes.
+- Treating this repo like a future UI app and adding component abstractions that
+  do not map to any current surface.

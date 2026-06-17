@@ -1,12 +1,16 @@
 # Backend Development Guidelines
 
-> Best practices for backend development in this project.
+> Backend here means the Python Stop-hook runtime and its file-based session state.
 
 ---
 
 ## Overview
 
-This directory contains guidelines for backend development. Fill in each file with your project's specific conventions.
+Codex Next does not have a server, API layer, or service container. The
+"backend" surface is the Python hook runtime under `codex-next/scripts/` plus
+its on-disk session state in `PLUGIN_DATA` or the plugin-local fallback state
+directory. Keep backend changes narrow, dependency-light, and compatible with
+the Stop hook's JSON input/output contract.
 
 ---
 
@@ -14,25 +18,35 @@ This directory contains guidelines for backend development. Fill in each file wi
 
 | Guide | Description | Status |
 |-------|-------------|--------|
-| [Directory Structure](./directory-structure.md) | Module organization and file layout | To fill |
-| [Database Guidelines](./database-guidelines.md) | ORM patterns, queries, migrations | To fill |
-| [Error Handling](./error-handling.md) | Error types, handling strategies | To fill |
-| [Quality Guidelines](./quality-guidelines.md) | Code standards, forbidden patterns | To fill |
-| [Logging Guidelines](./logging-guidelines.md) | Structured logging, log levels | To fill |
+| [Directory Structure](./directory-structure.md) | Runtime module layout and file ownership | Active |
+| [Database Guidelines](./database-guidelines.md) | File-based state instead of a database | Active |
+| [Error Handling](./error-handling.md) | Fail-open behavior and hook output contracts | Active |
+| [Quality Guidelines](./quality-guidelines.md) | Testing, review, and forbidden runtime changes | Active |
+| [Logging Guidelines](./logging-guidelines.md) | Why stdout is reserved and logging stays minimal | Active |
 
 ---
 
-## How to Fill These Guidelines
+## Pre-Development Checklist
 
-For each guideline file:
+- [ ] Read [Directory Structure](./directory-structure.md) before moving files
+      or adding helpers.
+- [ ] Read [Error Handling](./error-handling.md) before changing stop
+      classification or output JSON.
+- [ ] Read [Database Guidelines](./database-guidelines.md) for any persistence
+      change, even though the project does not use a database.
+- [ ] Read [Logging Guidelines](./logging-guidelines.md) before adding any
+      diagnostic output.
+- [ ] Read [Quality Guidelines](./quality-guidelines.md) before modifying tests
+      or retry behavior.
 
-1. Document your project's **actual conventions** (not ideals)
-2. Include **code examples** from your codebase
-3. List **forbidden patterns** and why
-4. Add **common mistakes** your team has made
+## Reference Files
 
-The goal is to help AI assistants and new team members understand how YOUR project works.
+- `codex-next/scripts/auto-recover-stop.py`
+- `codex-next/tests/test_auto_recover_stop.py`
+- `codex-next/tests/fixtures/*.json`
+- `codex-next/hooks/hooks.json`
+- `README.md`
 
 ---
 
-**Language**: All documentation should be written in **English**.
+**Language**: All documentation in this directory stays in English.

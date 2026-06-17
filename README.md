@@ -153,7 +153,7 @@ Recommended after publishing this repository. Add the remote marketplace, then
 install through Codex so the plugin is registered in the plugin directory:
 
 ```powershell
-codex plugin marketplace add <owner>/<repo> --ref main
+codex plugin marketplace add bahayonghang/CodexNext --ref main
 codex plugin add codex-next@codex-next-local
 ```
 

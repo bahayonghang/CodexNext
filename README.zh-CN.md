@@ -142,7 +142,7 @@ Stop hook 不会自动启动这个 server。
 适合推送仓库后使用。先添加远端 marketplace，再通过 Codex 安装，这样插件会进入插件目录的注册流程：
 
 ```powershell
-codex plugin marketplace add <owner>/<repo> --ref main
+codex plugin marketplace add bahayonghang/CodexNext --ref main
 codex plugin add codex-next@codex-next-local
 ```
 

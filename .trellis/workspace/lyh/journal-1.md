@@ -38,3 +38,36 @@ Bootstrapped Trellis workflow files and added the root-level codex-next plugin w
 ### Next Steps
 
 - None - task complete
+
+
+## Session 2: Bootstrap guidelines spec fill
+
+**Date**: 2026-06-17
+**Task**: Bootstrap guidelines spec fill
+**Branch**: `main`
+
+### Summary
+
+Replaced Trellis backend/frontend spec placeholders with repo-specific guidance for the Codex Next plugin, then archived 00-bootstrap-guidelines.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `95d5c82` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

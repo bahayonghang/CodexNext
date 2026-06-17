@@ -98,9 +98,9 @@ Stop hook 不会自动启动这个 server。
 
 这个仓库当前提供的是插件包本体。要让 Codex 安装它，仍然需要先把它加入 marketplace。
 
-### 方式一：仓库内本地 Marketplace
+### 仓库内本地 Marketplace
 
-适合你想直接在这个仓库里使用它。
+适合开发时直接在这个仓库里使用它。
 
 1. 创建或更新 `$REPO_ROOT/.agents/plugins/marketplace.json`：
 
@@ -137,42 +137,21 @@ Stop hook 不会自动启动这个 server。
 4. 在 `codex-next-local` 这个 marketplace 里找到 `codex-next` 并安装。
 5. 如果 Codex 提示你审核和信任 hook 定义，按提示完成。
 
-### 方式二：个人 Marketplace
+### 远端 Marketplace
 
-适合你希望跨多个仓库复用这个插件。
+适合推送仓库后使用。先添加远端 marketplace，再通过 Codex 安装，这样插件会进入插件目录的注册流程：
 
-1. 将当前目录复制到 `~/.codex/plugins/codex-next`。
-2. 创建或更新 `~/.agents/plugins/marketplace.json`：
-
-```json
-{
-  "name": "personal",
-  "interface": {
-    "displayName": "Personal"
-  },
-  "plugins": [
-    {
-      "name": "codex-next",
-      "source": {
-        "source": "local",
-        "path": "./.codex/plugins/codex-next"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Productivity"
-    }
-  ]
-}
+```powershell
+codex plugin marketplace add <owner>/<repo> --ref main
+codex plugin add codex-next@codex-next-local
 ```
 
-3. 重启 Codex。
-4. 打开 `/plugins`，安装 `codex-next`，并在需要时信任 hook。
+如果发布后的 marketplace 顶层 `name` 不是 `codex-next-local`，把命令里的
+`codex-next-local` 换成实际 marketplace 名称。
 
 ## 使用说明
 
-1. 安装插件。
+1. 通过 `codex plugin add` 或 `/plugins` 安装插件。
 2. 新开一个 Codex 线程。
 3. 正常使用 Codex。
 

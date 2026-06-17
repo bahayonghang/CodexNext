@@ -108,9 +108,9 @@ The Stop hook does not auto-start this server.
 This repository ships the plugin package itself. Codex still needs a marketplace
 entry before you can install it in the plugin directory.
 
-### Option 1: Repo-local Marketplace
+### Repo-local Marketplace
 
-Recommended when you want to use this plugin from this repository directly.
+Recommended while developing from this repository directly.
 
 1. Create or update `$REPO_ROOT/.agents/plugins/marketplace.json`:
 
@@ -147,42 +147,22 @@ Recommended when you want to use this plugin from this repository directly.
 4. Find `codex-next` in the `codex-next-local` marketplace and install it.
 5. Review and trust the plugin hook definition if Codex prompts you to do so.
 
-### Option 2: Personal Marketplace
+### Remote Marketplace
 
-Recommended when you want to use the plugin across repositories.
+Recommended after publishing this repository. Add the remote marketplace, then
+install through Codex so the plugin is registered in the plugin directory:
 
-1. Copy this folder to `~/.codex/plugins/codex-next`.
-2. Create or update `~/.agents/plugins/marketplace.json`:
-
-```json
-{
-  "name": "personal",
-  "interface": {
-    "displayName": "Personal"
-  },
-  "plugins": [
-    {
-      "name": "codex-next",
-      "source": {
-        "source": "local",
-        "path": "./.codex/plugins/codex-next"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Productivity"
-    }
-  ]
-}
+```powershell
+codex plugin marketplace add <owner>/<repo> --ref main
+codex plugin add codex-next@codex-next-local
 ```
 
-3. Restart Codex.
-4. Open `/plugins`, install `codex-next`, and trust the hook if prompted.
+If your published marketplace uses a different top-level `name`, replace
+`codex-next-local` with that marketplace name.
 
 ## Use
 
-1. Install the plugin.
+1. Install the plugin through `codex plugin add` or `/plugins`.
 2. Start a new Codex thread.
 3. Use Codex normally.
 

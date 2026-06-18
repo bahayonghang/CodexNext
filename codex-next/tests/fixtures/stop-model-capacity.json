@@ -1,0 +1,8 @@
+{
+  "turn_id": "turn-model-capacity",
+  "stop_hook_active": false,
+  "last_assistant_message": "Selected model is at capacity. Please try a different model.",
+  "transcript_path": null,
+  "cwd": "D:/Documents/Code/Agents/CodexNext",
+  "model": "gpt-5-codex"
+}

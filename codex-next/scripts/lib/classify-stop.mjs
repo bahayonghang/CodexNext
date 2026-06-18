@@ -1,8 +1,8 @@
 const ERROR_RE = /\b(error|failed|failure|interrupted|aborted|stopped|unable|cannot|can't|timed out|timeout)\b/i;
 const RATE_LIMIT_RE = /(\b429\b|rate[\s_-]?limit|too many requests|rate[\s_-]?limited|retry[\s_-]?after)/i;
 const OVERLOAD_RE = /(\b503\b|service unavailable|server error|internal server error|bad gateway|gateway timeout|overloaded|temporarily unavailable)/i;
-const USAGE_LIMIT_RE = /(usage limit|quota exceeded|credits?(?: exhausted| depleted)?|workspace usage limit|model (?:cap|limit)|monthly budget|spending limit)/i;
-const USAGE_CONTEXT_RE = /\b(reached|hit|exceeded|exhausted|depleted|reset|wait|later|remaining|quota|limit)\b/i;
+const USAGE_LIMIT_RE = /(usage limit|quota exceeded|credits?(?: exhausted| depleted)?|workspace usage limit|model (?:cap|limit|is at capacity)|monthly budget|spending limit)/i;
+const USAGE_CONTEXT_RE = /\b(reached|hit|exceeded|exhausted|depleted|reset|wait|later|remaining|quota|limit|capacity)\b/i;
 
 export const MAX_ATTEMPTS_TOTAL = 5;
 export const MAX_ATTEMPTS_BY_KIND = Object.freeze({

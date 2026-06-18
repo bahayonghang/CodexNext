@@ -36,6 +36,13 @@ test("classifies and retries usage limit", () => {
   assert.match(result.reason.toLowerCase(), /usage limit/);
 });
 
+test("classifies and retries selected model capacity stops", () => {
+  const stateDir = makeStateDir();
+  const result = processStop(loadFixture("stop-model-capacity.json"), { stateDir });
+  assert.equal(result.decision, "block");
+  assert.match(result.reason.toLowerCase(), /usage limit/);
+});
+
 test("ignores non-matching stops", () => {
   const stateDir = makeStateDir();
   const result = processStop(loadFixture("stop-non-matching.json"), { stateDir });

@@ -1,6 +1,6 @@
 {
   "name": "codex-next",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Auto-recover Codex turns interrupted by 429, 503, and usage-limit errors.",
   "author": {
     "name": "Local developer"
